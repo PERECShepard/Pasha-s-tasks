@@ -15,7 +15,7 @@ public:
         std::cout << "Please enter the number between 1 - 10 range:";
         std::cin >> humanChoice;
         if (humanChoice < 1 || humanChoice > 10) {
-            std::cout << "Неверный ввод. Выберите число от 1 до 10.\n";
+            std::cout << "Invalid input select a number from 1 to 10.";
         }
         computerChoice = 3;
         randNumber = 5;
