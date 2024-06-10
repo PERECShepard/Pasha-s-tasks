@@ -1,0 +1,43 @@
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+
+class NumberGame{
+    int human = 1000;
+    int computer = 1000;
+public:
+    void balance(){
+        std::cout << "Human:_" << human << std::endl;
+        std::cout << "Computer:_" << computer;
+    }
+    void game(){
+        int humanChoice, computerChoice, randNumber;
+        std::cout << "Please enter the number between 1 - 10 range:";
+        std::cin >> humanChoice;
+        computerChoice = rand() % 10;
+        randNumber = rand() % 10;
+        while(computerChoice == humanChoice){
+            computerChoice = rand() % 10;
+        }
+        if(std::abs(computerChoice - randNumber) < std::abs(humanChoice - randNumber)){
+            std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
+                << "Rand number: " << randNumber;
+            std::cout << "computer win!";
+            human -= 100;
+            computer += 100;
+        }else {
+            std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
+                    << "Rand number: " << randNumber;
+            std::cout << "U R win";
+            human += 100;
+            computer -= 100;
+        }
+    }
+};
+
+int main() {
+    srand(time(nullptr));
+    NumberGame number;
+    number.game();
+    number.balance();
+}
