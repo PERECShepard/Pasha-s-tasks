@@ -14,21 +14,36 @@ public:
         int humanChoice, computerChoice, randNumber;
         std::cout << "Please enter the number between 1 - 10 range:";
         std::cin >> humanChoice;
-        computerChoice = rand() % 10;
-        randNumber = rand() % 10;
+        if (humanChoice < 1 || humanChoice > 10) {
+            std::cout << "Неверный ввод. Выберите число от 1 до 10.\n";
+        }
+        computerChoice = 3;
+        randNumber = 5;
         while(computerChoice == humanChoice){
-            computerChoice = rand() % 10;
+            computerChoice = rand() % 10 + 1;
         }
         if(std::abs(computerChoice - randNumber) < std::abs(humanChoice - randNumber)){
             std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
-                << "Rand number: " << randNumber;
-            std::cout << "computer win!";
+                      << "Rand number: " << randNumber;
+            std::cout << "computer win because he was closer";
+            human -= 100;
+            computer += 100;
+        }else if(std::abs(computerChoice - randNumber) > std::abs(humanChoice - randNumber)){
+            std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
+                      << "Rand number: " << randNumber;
+            std::cout << "U R win because u were closer";
+            human += 100;
+            computer -= 100;
+        }else if(computerChoice < humanChoice){
+            std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
+                      << "Rand number: " << randNumber << std::endl;
+            std::cout << "computer win because his number was less";
             human -= 100;
             computer += 100;
         }else {
             std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
-                    << "Rand number: " << randNumber;
-            std::cout << "U R win";
+                      << "Rand number: " << randNumber << std::endl;
+            std::cout << "U R win because your number was less";
             human += 100;
             computer -= 100;
         }
