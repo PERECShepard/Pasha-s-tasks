@@ -11,36 +11,20 @@ public:
         humanChoice = getNumber();
         computerChoice = computerNumber(humanChoice);
         randNumber = rand() % 10 + 1;
-        if(std::abs(computerChoice - randNumber) < std::abs(humanChoice - randNumber)){
-            std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
-                      << "Rand number: " << randNumber;
-            std::cout << "computer win because he was closer";
-            human -= 100;
-            computer += 100;
-        }else if(std::abs(computerChoice - randNumber) > std::abs(humanChoice - randNumber)){
-            std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
-                      << "Rand number: " << randNumber;
-            std::cout << "U R win because u were closer";
-            human += 100;
-            computer -= 100;
-        }else if(computerChoice < humanChoice){
-            std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
-                      << "Rand number: " << randNumber << std::endl;
-            std::cout << "computer win because his number was less";
-            human -= 100;
-            computer += 100;
+        int absComputer = std::abs(computerChoice - randNumber);
+        int absHuman = std::abs(humanChoice - randNumber);
+        std::cout << "Game begin; Pc chose: " << computerChoice << "Your choice: " << humanChoice
+                  << "Number: " << randNumber << std::endl;
+        if(absComputer == absHuman){
+            getWinnerByRange(humanChoice, computerChoice);
         }else {
-            std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
-                      << "Rand number: " << randNumber << std::endl;
-            std::cout << "U R win because your number was less";
-            human += 100;
-            computer -= 100;
+            getWinnerByAbs(absHuman, absComputer);
         }
     }
     int getNumber(){
         int number;
         std::cout << "Please enter the number between 1 - 10 range:";
-        while(std::cin >> number && !(number > 1 && number < 10)){
+        while(std::cin >> number && !(number >= 1 && number <= 10)){
             std::cout << "Invalid input. Repeat.";
         }
         return number;
@@ -52,6 +36,28 @@ public:
             compNumber = rand() % 10 + 1;;
         }
         return compNumber;
+    }
+    void getWinnerByRange(int compChoice, int humChoice){
+        if(humChoice < compChoice){
+            std::cout << "U R win because your number were less" << std::endl;
+            human += 100;
+            computer -= 100;
+        }else {
+            std::cout << "PC win because his number were less" << std::endl;
+            human -= 100;
+            computer += 100;
+        }
+    }
+    void getWinnerByAbs(int humAbs, int compAbs){
+        if(humAbs < compAbs){
+            std::cout << "U R win because your number were closer" << std::endl;
+            human += 100;
+            computer -= 100;
+        }else {
+            std::cout << "PC win because his number was closer" << std::endl;
+            human -= 100;
+            computer += 100;
+        }
     }
     void balance() const{
         std::cout << "Human:_" << human << std::endl;
