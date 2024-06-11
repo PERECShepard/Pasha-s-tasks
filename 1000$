@@ -6,26 +6,11 @@ class NumberGame{
     int human = 1000;
     int computer = 1000;
 public:
-    void balance() const{
-        std::cout << "Human:_" << human << std::endl;
-        std::cout << "Computer:_" << computer;
-    }
-    int getNumber(){
-        int number;
-        std::cout << "Please enter the number between 1 - 10 range:";
-        while(std::cin >> number && !(number > 1 && number < 10)){
-            std::cout << "Invalid input. Repeat.";
-        }
-        return number;
-    }
     void game(){
         int humanChoice, computerChoice, randNumber;
         humanChoice = getNumber();
-        computerChoice = rand() % 10 + 1;
+        computerChoice = computerNumber(humanChoice);
         randNumber = rand() % 10 + 1;
-        while(computerChoice == humanChoice){
-            computerChoice = rand() % 10 + 1;
-        }
         if(std::abs(computerChoice - randNumber) < std::abs(humanChoice - randNumber)){
             std::cout << "Comp number: " << computerChoice << "Your number: " << humanChoice
                       << "Rand number: " << randNumber;
@@ -51,6 +36,26 @@ public:
             human += 100;
             computer -= 100;
         }
+    }
+    int getNumber(){
+        int number;
+        std::cout << "Please enter the number between 1 - 10 range:";
+        while(std::cin >> number && !(number > 1 && number < 10)){
+            std::cout << "Invalid input. Repeat.";
+        }
+        return number;
+    }
+    int computerNumber(int humanNumb){
+        int compNumber;
+        compNumber = rand() % 10 + 1;
+        while(compNumber == humanNumb){
+            compNumber = rand() % 10 + 1;;
+        }
+        return compNumber;
+    }
+    void balance() const{
+        std::cout << "Human:_" << human << std::endl;
+        std::cout << "Computer:_" << computer;
     }
 };
 
