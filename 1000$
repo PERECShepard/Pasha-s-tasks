@@ -6,19 +6,23 @@ class NumberGame{
     int human = 1000;
     int computer = 1000;
 public:
-    void balance(){
+    void balance() const{
         std::cout << "Human:_" << human << std::endl;
         std::cout << "Computer:_" << computer;
     }
+    int getNumber(){
+        int number;
+        std::cout << "Please enter the number between 1 - 10 range:";
+        while(std::cin >> number && !(number > 1 && number < 10)){
+            std::cout << "Invalid input. Repeat.";
+        }
+        return number;
+    }
     void game(){
         int humanChoice, computerChoice, randNumber;
-        std::cout << "Please enter the number between 1 - 10 range:";
-        std::cin >> humanChoice;
-        if (humanChoice < 1 || humanChoice > 10) {
-            std::cout << "Invalid input select a number from 1 to 10.";
-        }
-        computerChoice = 3;
-        randNumber = 5;
+        humanChoice = getNumber();
+        computerChoice = rand() % 10 + 1;
+        randNumber = rand() % 10 + 1;
         while(computerChoice == humanChoice){
             computerChoice = rand() % 10 + 1;
         }
