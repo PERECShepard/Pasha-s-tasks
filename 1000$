@@ -1,6 +1,5 @@
 #include <iostream>
-#include <ctime>
-#include <cstdlib>
+#include <random>
 
 class Balance{
     int human_score;
@@ -12,7 +11,7 @@ public:
     }
     void showBalance() const{
         std::cout << "Human:_" << human_score << std::endl;
-        std::cout << "Computer:_" << pc_score;
+        std::cout << "Computer:_" << pc_score << std::endl;
     }
     void humWinBalance(){
         human_score += 100;
@@ -29,24 +28,27 @@ class NumberGame{
     Balance balance = Balance(1000, 1000);
 public:
     void game(){
+        std::random_device dev;
+        std::mt19937 gen(dev());
+        std::uniform_int_distribution<> distrib(1, 10);
         int humanChoice, computerChoice, randNumber;
-        humanChoice = getNumber();
-        computerChoice = computerNumber(humanChoice);
-        randNumber = rand() % 10 + 1;
+        humanChoice = getPlayerInput();
+        computerChoice = calcComputerTurn(humanChoice);
+        randNumber = distrib(gen);
         int absComputer = std::abs(computerChoice - randNumber);
         int absHuman = std::abs(humanChoice - randNumber);
-        std::cout << "Game begin; Pc chose: " << computerChoice <<std::endl
+        std::cout << "Game begin"
+                  << "Pc chose: " << computerChoice <<std::endl
                   << "Your choice: " << humanChoice << std::endl
                   << "Number: " << randNumber << std::endl;
         if(absComputer == absHuman){
-            getWinnerByRange(balance, humanChoice, computerChoice);
-            balance.showBalance();
+            defineWinnerByRange(humanChoice, computerChoice);
         }else {
-            getWinnerByAbs(balance,absHuman, absComputer);
-            balance.showBalance();
+            defineWinnerByAbs(absHuman, absComputer);
         }
+        balance.showBalance();
     }
-    int getNumber(){
+    int getPlayerInput(){
         int number;
         std::cout << "Please enter the number between 1 - 10 range:";
         while(std::cin >> number && !(number >= 1 && number <= 10)){
@@ -54,37 +56,35 @@ public:
         }
         return number;
     }
-    int computerNumber(int humanNumb){
+    int calcComputerTurn(int humanNumb){
         int compNumber;
         compNumber = rand() % 10 + 1;
         while(compNumber == humanNumb){
-            compNumber = rand() % 10 + 1;;
+            compNumber = rand() % 10 + 1;
         }
         return compNumber;
     }
-    void getWinnerByRange(Balance bal,int compChoice, int humChoice){
+    void defineWinnerByRange(int compChoice, int humChoice){
         if(humChoice < compChoice){
             std::cout << "U R win because your number were less" << std::endl;
-            bal.humWinBalance();
-            bal.showBalance();
+            balance.humWinBalance();
         }else {
             std::cout << "PC win because his number were less" << std::endl;
-            bal.pcWinBalance();
+            balance.pcWinBalance();
         }
     }
-    void getWinnerByAbs(Balance bal, int humAbs, int compAbs){
+    void defineWinnerByAbs(int humAbs, int compAbs){
         if(humAbs < compAbs){
             std::cout << "U R win because your number were closer" << std::endl;
-            bal.humWinBalance();
+            balance.humWinBalance();
         }else {
             std::cout << "PC win because his number was closer" << std::endl;
-            bal.pcWinBalance();
+            balance.pcWinBalance();
         }
     }
 };
 
 int main() {
-    srand(time(nullptr));
     NumberGame number;
     number.game();
 }
