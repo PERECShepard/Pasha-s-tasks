@@ -1,5 +1,6 @@
-#include <iostream>
 #include <random>
+#include <chrono>
+#include <iostream>
 
 class Balance{
     int human_score;
@@ -25,19 +26,21 @@ public:
 };
 
 class NumberGame{
+    int computerChoice;
+    int randNumber;
+    int humanChoice;
+    std::mt19937 gen;
+    std::uniform_int_distribution<> distrib;
     Balance balance = Balance(1000, 1000);
 public:
-    void game(){
-        std::random_device dev;
-        std::mt19937 gen(dev());
-        std::uniform_int_distribution<> distrib(1, 10);
-        int humanChoice, computerChoice, randNumber;
+    NumberGame(): gen{std::random_device{}()}, distrib{1, 10}{}
+    void run(){
         humanChoice = getPlayerInput();
         computerChoice = calcComputerTurn(humanChoice);
         randNumber = distrib(gen);
         int absComputer = std::abs(computerChoice - randNumber);
         int absHuman = std::abs(humanChoice - randNumber);
-        std::cout << "Game begin"
+        std::cout << "Game begin" << std::endl
                   << "Pc chose: " << computerChoice <<std::endl
                   << "Your choice: " << humanChoice << std::endl
                   << "Number: " << randNumber << std::endl;
@@ -57,12 +60,10 @@ public:
         return number;
     }
     int calcComputerTurn(int humanNumb){
-        int compNumber;
-        compNumber = rand() % 10 + 1;
-        while(compNumber == humanNumb){
-            compNumber = rand() % 10 + 1;
+        while(computerChoice == humanNumb){
+            computerChoice = distrib(gen);
         }
-        return compNumber;
+        return computerChoice;
     }
     void defineWinnerByRange(int compChoice, int humChoice){
         if(humChoice < compChoice){
@@ -85,6 +86,7 @@ public:
 };
 
 int main() {
-    NumberGame number;
-    number.game();
+    std::random_device device;
+    NumberGame game;
+    game.run();
 }
