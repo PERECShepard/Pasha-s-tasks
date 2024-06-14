@@ -7,24 +7,24 @@ class NumberGame{
     int randNumber;
     int humanChoice;
     Balance balance = Balance(1000, 1000);
-    RandomEngine re{1, 10};
+    RandomEngine re;
 public:
     void run(){
         humanChoice = getPlayerInput();
         computerChoice = calcComputerTurn(humanChoice);
         randNumber = re.getRandomNumber();
-        int absComputer = std::abs(computerChoice - randNumber);
-        int absHuman = std::abs(humanChoice - randNumber);
-        std::cout << "Game begin" << std::endl
-                  << "Pc chose: " << computerChoice <<std::endl
-                  << "Your choice: " << humanChoice << std::endl
-                  << "Number: " << randNumber << std::endl;
-        if(absComputer == absHuman){
-            defineWinnerByRange(humanChoice, computerChoice);
-        }else {
-            defineWinnerByAbs(absHuman, absComputer);
-        }
-        balance.showBalance();
+            int absComputer = std::abs(computerChoice - randNumber);
+            int absHuman = std::abs(humanChoice - randNumber);
+            std::cout << "Game begin" << std::endl
+                      << "Pc chose: " << computerChoice << std::endl
+                      << "Your choice: " << humanChoice << std::endl
+                      << "Number: " << randNumber << std::endl;
+            if (absComputer == absHuman) {
+                defineWinnerByRange(humanChoice, computerChoice);
+            } else {
+                defineWinnerByAbs(absHuman, absComputer);
+            }
+            balance.showBalance();
     }
     int getPlayerInput(){
         int number;
@@ -35,6 +35,7 @@ public:
         return number;
     }
     int calcComputerTurn(int humanNumb){
+        computerChoice = re.getRandomNumber();
         while(computerChoice == humanNumb){
             computerChoice = re.getRandomNumber();
         }
@@ -61,7 +62,6 @@ public:
 };
 
 int main() {
-    std::random_device device;
     NumberGame game;
     game.run();
 }
