@@ -1,43 +1,18 @@
-#include <random>
-#include <chrono>
 #include <iostream>
-
-class Balance{
-    int human_score;
-    int pc_score;
-public:
-    Balance(int humScore, int compScore){
-        human_score = humScore;
-        pc_score = compScore;
-    }
-    void showBalance() const{
-        std::cout << "Human:_" << human_score << std::endl;
-        std::cout << "Computer:_" << pc_score << std::endl;
-    }
-    void humWinBalance(){
-        human_score += 100;
-        pc_score -= 100;
-    }
-    void pcWinBalance(){
-        human_score -= 100;
-        pc_score += 100;
-    }
-
-};
+#include "balance.cpp"
+#include "randomEngine.cpp"
 
 class NumberGame{
     int computerChoice;
     int randNumber;
     int humanChoice;
-    std::mt19937 gen;
-    std::uniform_int_distribution<> distrib;
     Balance balance = Balance(1000, 1000);
+    RandomEngine re{1, 10};
 public:
-    NumberGame(): gen{std::random_device{}()}, distrib{1, 10}{}
     void run(){
         humanChoice = getPlayerInput();
         computerChoice = calcComputerTurn(humanChoice);
-        randNumber = distrib(gen);
+        randNumber = re.getRandomNumber();
         int absComputer = std::abs(computerChoice - randNumber);
         int absHuman = std::abs(humanChoice - randNumber);
         std::cout << "Game begin" << std::endl
@@ -61,7 +36,7 @@ public:
     }
     int calcComputerTurn(int humanNumb){
         while(computerChoice == humanNumb){
-            computerChoice = distrib(gen);
+            computerChoice = re.getRandomNumber();
         }
         return computerChoice;
     }
