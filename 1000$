@@ -7,12 +7,12 @@ class NumberGame{
     int randNumber;
     int humanChoice;
     Balance balance = Balance(1000, 1000);
-    RandomEngine re;
+    RandomEngine randomService;
 public:
     void run(){
         humanChoice = getPlayerInput();
-        computerChoice = calcComputerTurn(humanChoice);
-        randNumber = re.getRandomNumber();
+        computerChoice = getComputerInput(humanChoice);
+        randNumber = randomService.getRandomNumber();
             int absComputer = std::abs(computerChoice - randNumber);
             int absHuman = std::abs(humanChoice - randNumber);
             std::cout << "Game begin" << std::endl
@@ -34,20 +34,20 @@ public:
         }
         return number;
     }
-    int calcComputerTurn(int humanNumb){
-        computerChoice = re.getRandomNumber();
+    int getComputerInput(int humanNumb){
+        int computerChoice; // Можно ли так сделать?
         while(computerChoice == humanNumb){
-            computerChoice = re.getRandomNumber();
+            computerChoice = randomService.getRandomNumber();
         }
         return computerChoice;
     }
     void defineWinnerByRange(int compChoice, int humChoice){
         if(humChoice < compChoice){
             std::cout << "U R win because your number were less" << std::endl;
-            balance.humWinBalance();
+            balance.humWinBalance(); // лучше не сокращать
         }else {
             std::cout << "PC win because his number were less" << std::endl;
-            balance.pcWinBalance();
+            balance.pcWinBalance(); // Если у тебя везде фигурирует Computer, не надо потом это превращать в pc
         }
     }
     void defineWinnerByAbs(int humAbs, int compAbs){
