@@ -8,17 +8,28 @@ public:
         human_score = humScore;
         pc_score = compScore;
     }
+
     void showBalance() const{
         std::cout << "Human:_" << human_score << std::endl;
         std::cout << "Computer:_" << pc_score << std::endl;
     }
+
     void humWinBalance(){
         human_score += 100;
         pc_score -= 100;
     }
-    void pcWinBalance(){
+
+    void computerWinBalance(){
         human_score -= 100;
         pc_score += 100;
+    }
+
+    int getHumanScoreBalance(){
+        return human_score;
+    }
+
+    int getPcScoreBalance(){
+        return pc_score;
     }
 
 };
