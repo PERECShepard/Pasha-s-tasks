@@ -4,10 +4,7 @@ class Balance{
     int human_score;
     int pc_score;
 public:
-    Balance(int humScore, int compScore){
-        human_score = humScore;
-        pc_score = compScore;
-    }
+    Balance(int humScore, int compScore) : human_score{humScore}, pc_score{compScore}{}
 
     void showBalance() const{
         std::cout << "Human:_" << human_score << std::endl;
