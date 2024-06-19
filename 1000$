@@ -2,70 +2,66 @@
 #include "balance.cpp"
 #include "randomEngine.cpp"
 
-struct Choices{
-    int number1;
-    int number2;
-    int value1;
-    int value2;
+struct Character{
+    int humanNumber1;
+    int humanNumber2;
+    int pcValue1;
+    int pcValue2;
 };
 
 class NumberGame{
     int randNumber;
     Balance balance = Balance(1000, 1000);
-    RandomEngine randomService;
+    RandomEngine randomEngine;
 public:
     void run(){
         while(balance.getHumanScoreBalance() >= 0 || balance.getPcScoreBalance() >= 0) {
             std::cout << balance.getHumanScoreBalance();
-            Choices ch;
+            Character ch;
             getPlayerInput(ch);
             calcComputerTurn(ch);
-            randNumber = randomService.getRandomNumber();
+            randNumber = randomEngine.getRandomNumber();
 
-            int absComputer1 = std::abs(ch.value1 - randNumber);
-            int absComputer2 = std::abs(ch.value2 - randNumber);
-            int absComputerMin = absComputer1 < absComputer2 ? absComputer1 : absComputer2;
-            std::cout << absComputer1 << " " << absComputer2 << " " << absComputerMin << std::endl;
-            int absHuman1 = std::abs(ch.number1 - randNumber);
-            int absHuman2 = std::abs(ch.number2 - randNumber);
-            int absHumanMin = absHuman1 < absHuman2 ? absHuman1 : absHuman2;
-            std::cout << absHuman1 << " " << absHuman2 << " " << absHumanMin;
+            int absComputer = std::abs(ch.pcValue1 + ch.pcValue2 - randNumber);
+            //std::cout << absComputer1 << " " << absComputer2 << " " << absComputerMin << std::endl;
+            int absHuman = std::abs(ch.humanNumber1 + ch.humanNumber2 - randNumber);
+            //std::cout << absHuman1 << " " << absHuman2 << " " << absHumanMin;
 
             std::cout << "Game begin" << std::endl
-                      << "Pc chose: " << ch.value1 << " and " << ch.value2 << std::endl
-                      << "Your choice: " << ch.number1 << " and " << ch.number2 << std::endl
+                      << "Pc chose: " << ch.pcValue1 << " and " << ch.pcValue2 << std::endl
+                      << "Your choice: " << ch.humanNumber1 << " and " << ch.humanNumber2 << std::endl
                       << "Number: " << randNumber << std::endl;
 
-            if (absComputerMin == absHumanMin) {
+            if (absComputer == absHuman) {
                 defineWinnerByRange(ch);
             } else {
-                defineWinnerByAbs(absComputerMin, absHumanMin);
+                defineWinnerByAbs(absComputer, absHuman);
             }
             balance.showBalance();
         }
     }
 
-    Choices getPlayerInput(Choices &humCh){
+    Character getPlayerInput(Character &humCh){
         std::cout << "Please enter 2 numbers between 1 - 20 range:";
-        while(std::cin >> humCh.number1 && std::cin >> humCh.number2 && !(humCh.number1 >= 1 && humCh.number1 <= 10)
-              || !(humCh.number2 >= 1 && humCh.number2 <= 10) || humCh.number1 == humCh.number2){
+        while(std::cin >> humCh.humanNumber1 && std::cin >> humCh.humanNumber2 && !(humCh.humanNumber1 >= 1 && humCh.humanNumber1 <= 20)
+              || !(humCh.humanNumber2 >= 1 && humCh.humanNumber2 <= 20) || humCh.humanNumber1 == humCh.humanNumber2){
             std::cout << "Invalid input. Repeat.";
         }
         return humCh;
     }
 
-    Choices calcComputerTurn(Choices &pcCh){
-        pcCh.value1 = randomService.getRandomNumber();
-        pcCh.value2 = randomService.getRandomNumber();
-        while(pcCh.value1 == pcCh.value2){
-            pcCh.value1 = randomService.getRandomNumber();
+    Character calcComputerTurn(Character &pcCh){
+        pcCh.pcValue1 = randomEngine.getRandomNumber();
+        pcCh.pcValue2 = randomEngine.getRandomNumber();
+        while(pcCh.pcValue1 == pcCh.pcValue2){
+            pcCh.pcValue1 = randomEngine.getRandomNumber();
         }
         return pcCh;
     }
 
-    void defineWinnerByRange(Choices &ch){
-        int humanMin = ch.number1 < ch.number2 ? ch.number1 : ch.number2;
-        int pcMin = ch.value1 < ch.value2 ? ch.value1 : ch.value2;
+    void defineWinnerByRange(Character &ch){
+        int humanMin = ch.humanNumber1 < ch.humanNumber2 ? ch.humanNumber1 : ch.humanNumber2;
+        int pcMin = ch.pcValue1 < ch.pcValue2 ? ch.pcValue1 : ch.pcValue2;
         if(humanMin < pcMin){
             std::cout << "U R win because your number were less" << std::endl;
             balance.humWinBalance();
