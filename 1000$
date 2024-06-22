@@ -1,4 +1,5 @@
 #include <iostream>
+#include <set>
 #include "randomEngine.cpp"
 #include "player.cpp"
 
@@ -11,15 +12,13 @@ public:
     NumberGame() : human(false), pc(true){}
     void run(){
         int turns;
-        std::cout << "Please enter count amount of numbers: ";
+        std::cout << "Please enter amount of numbers: ";
         std::cin >> turns;
-        while(human.is_playable() || pc.is_playable()) {
+        while(human.is_playable() && pc.is_playable()) {
             std::cout << "Now u have: " << human.getScore() << std::endl
                 << "and pc have: " << pc.getScore() << std::endl;
-            for(int i = 0; i < turns; ++i) {
-                human.addNumbers(getPlayerInput());
-                pc.addNumbers(calcComputerTurn());
-            }
+            human.addNumbers(getPlayerInput(turns));
+            pc.addNumbers(calcComputerTurn(turns));
             randNumber = randomEngine.getRandomNumber();
 
             int absComputer = std::abs(sum(pc) - randNumber);
@@ -31,61 +30,57 @@ public:
             std::cout << "Number: " << randNumber << std::endl;
 
             if (absComputer == absHuman) {
-                defineWinnerByRange();
+                std::cout << "*********Tie!*********" << std::endl;
             } else {
                 defineWinnerByAbs(absComputer, absHuman);
             }
-            human.getScore();
-            pc.getScore();
         }
+        std::cout << "Gj";
     }
 
-    int getPlayerInput(){
-            std::cout << "Please enter number between 1 - 20 range:";
-            int number;
-            while (std::cin >> number && !(number >= 1 && number <= 20)) {
-                std::cout << "Invalid input. Repeat.";
+    std::set<int> getPlayerInput(int &count){
+        std::cout << "Please enter number between 1 - 20 range:";
+        int number;
+        std::set<int> input;
+        for(int i = 0; i < count; ++i) {
+            while (std::cin >> number) {
+                if (input.insert(number).second && (number >= 1 && number <= 20)) {
+                    input.insert(number);
+                    break;
+                } else std::cout << "Wrong input. Try again.";
             }
-            return number;
+        }
+        return input;
     }
 
-    int calcComputerTurn(){
+    std::set<int> calcComputerTurn(int &count){
         int pc_value;
+        std::set<int> pc_input;
         pc_value = randomEngine.getRandomNumber();
-        if(pc_value )
-        return pc_value;
+        for(int i = 0; i < count; ++i) {
+            while (!pc_input.insert(pc_value).second) {
+                pc_value = randomEngine.getRandomNumber();
+            }
+        }
+        return pc_input;
     }
 
     int sum(const Player &player){
         int sum = 0;
-        const std::vector<int>& nums = player.getNumbers();
+        const std::set<int>& nums = player.getNumbers();
         for (auto it = nums.begin(); it != nums.end(); ++it) {
             sum += *it;
         }
         return sum;
     }
 
-    void defineWinnerByRange(){
-        if(human.findMinValue() < pc.findMinValue()){
-            std::cout << "U R win because your number were less" << std::endl;
-            human.winBalance();
-            pc.loseBalance();
-        }else {
-            std::cout << "PC win because his number were less" << std::endl;
-            pc.winBalance();
-            human.loseBalance();
-        }
-    }
-
     void defineWinnerByAbs(int humAbs, int compAbs){
         if(humAbs > compAbs){
             std::cout << "U R win because your number were closer" << std::endl;
-            human.winBalance();
-            pc.loseBalance();
+            human.updateBalance(pc);
         }else {
             std::cout << "PC win because his number was closer" << std::endl;
-            pc.winBalance();
-            human.loseBalance();
+            pc.updateBalance(human);
         }
     }
 };
