@@ -1,83 +1,91 @@
 #include <iostream>
-#include "balance.cpp"
 #include "randomEngine.cpp"
-
-struct Character{
-    int humanNumber1;
-    int humanNumber2;
-    int pcValue1;
-    int pcValue2;
-};
+#include "player.cpp"
 
 class NumberGame{
     int randNumber;
-    Balance balance = Balance(1000, 1000);
     RandomEngine randomEngine;
+    Player human;
+    Player pc;
 public:
+    NumberGame() : human(false), pc(true){}
     void run(){
-        while(balance.getHumanScoreBalance() >= 0 || balance.getPcScoreBalance() >= 0) {
-            std::cout << balance.getHumanScoreBalance();
-            Character ch;
-            getPlayerInput(ch);
-            calcComputerTurn(ch);
+        int turns;
+        std::cout << "Please enter count amount of numbers: ";
+        std::cin >> turns;
+        while(human.is_playable() || pc.is_playable()) {
+            std::cout << "Now u have: " << human.getScore() << std::endl
+                << "and pc have: " << pc.getScore() << std::endl;
+            for(int i = 0; i < turns; ++i) {
+                human.addNumbers(getPlayerInput());
+                pc.addNumbers(calcComputerTurn());
+            }
             randNumber = randomEngine.getRandomNumber();
 
-            int absComputer = std::abs(ch.pcValue1 + ch.pcValue2 - randNumber);
-            //std::cout << absComputer1 << " " << absComputer2 << " " << absComputerMin << std::endl;
-            int absHuman = std::abs(ch.humanNumber1 + ch.humanNumber2 - randNumber);
-            //std::cout << absHuman1 << " " << absHuman2 << " " << absHumanMin;
+            int absComputer = std::abs(sum(pc) - randNumber);
+            int absHuman = std::abs(sum(human) - randNumber);
 
             std::cout << "Game begin" << std::endl
-                      << "Pc chose: " << ch.pcValue1 << " and " << ch.pcValue2 << std::endl
-                      << "Your choice: " << ch.humanNumber1 << " and " << ch.humanNumber2 << std::endl
-                      << "Number: " << randNumber << std::endl;
+                      << "Pc chose: " ; pc.showNumbers();
+            std::cout <<  "Your choice: "; human.showNumbers();
+            std::cout << "Number: " << randNumber << std::endl;
 
             if (absComputer == absHuman) {
-                defineWinnerByRange(ch);
+                defineWinnerByRange();
             } else {
                 defineWinnerByAbs(absComputer, absHuman);
             }
-            balance.showBalance();
+            human.getScore();
+            pc.getScore();
         }
     }
 
-    Character getPlayerInput(Character &humCh){
-        std::cout << "Please enter 2 numbers between 1 - 20 range:";
-        while(std::cin >> humCh.humanNumber1 && std::cin >> humCh.humanNumber2 && !(humCh.humanNumber1 >= 1 && humCh.humanNumber1 <= 20)
-              || !(humCh.humanNumber2 >= 1 && humCh.humanNumber2 <= 20) || humCh.humanNumber1 == humCh.humanNumber2){
-            std::cout << "Invalid input. Repeat.";
-        }
-        return humCh;
+    int getPlayerInput(){
+            std::cout << "Please enter number between 1 - 20 range:";
+            int number;
+            while (std::cin >> number && !(number >= 1 && number <= 20)) {
+                std::cout << "Invalid input. Repeat.";
+            }
+            return number;
     }
 
-    Character calcComputerTurn(Character &pcCh){
-        pcCh.pcValue1 = randomEngine.getRandomNumber();
-        pcCh.pcValue2 = randomEngine.getRandomNumber();
-        while(pcCh.pcValue1 == pcCh.pcValue2){
-            pcCh.pcValue1 = randomEngine.getRandomNumber();
-        }
-        return pcCh;
+    int calcComputerTurn(){
+        int pc_value;
+        pc_value = randomEngine.getRandomNumber();
+        if(pc_value )
+        return pc_value;
     }
 
-    void defineWinnerByRange(Character &ch){
-        int humanMin = ch.humanNumber1 < ch.humanNumber2 ? ch.humanNumber1 : ch.humanNumber2;
-        int pcMin = ch.pcValue1 < ch.pcValue2 ? ch.pcValue1 : ch.pcValue2;
-        if(humanMin < pcMin){
+    int sum(const Player &player){
+        int sum = 0;
+        const std::vector<int>& nums = player.getNumbers();
+        for (auto it = nums.begin(); it != nums.end(); ++it) {
+            sum += *it;
+        }
+        return sum;
+    }
+
+    void defineWinnerByRange(){
+        if(human.findMinValue() < pc.findMinValue()){
             std::cout << "U R win because your number were less" << std::endl;
-            balance.humWinBalance();
+            human.winBalance();
+            pc.loseBalance();
         }else {
             std::cout << "PC win because his number were less" << std::endl;
-            balance.computerWinBalance();
+            pc.winBalance();
+            human.loseBalance();
         }
     }
 
     void defineWinnerByAbs(int humAbs, int compAbs){
         if(humAbs > compAbs){
             std::cout << "U R win because your number were closer" << std::endl;
-            balance.humWinBalance();
+            human.winBalance();
+            pc.loseBalance();
         }else {
             std::cout << "PC win because his number was closer" << std::endl;
-            balance.computerWinBalance();
+            pc.winBalance();
+            human.loseBalance();
         }
     }
 };
