@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+
+class Player{
+    std::vector<int> numbers;
+    int score;
+    bool is_pc;
+public:
+    Player(bool is_computer = false) : score(1000), is_pc(is_computer){}
+
+    void addNumbers(int value){
+        numbers.push_back(value);
+    }
+
+    void showNumbers(){
+        for(int i = 0; i < numbers.size(); ++i){
+            std::cout << numbers[i] << " _ ";
+        }
+    }
+
+    const std::vector<int>& getNumbers() const {
+        return numbers;
+    }
+
+    int findMinValue() const {
+        int minValue = numbers[0];
+        for (int i = 1; i < numbers.size(); ++i) {
+            if (numbers[i] < minValue) {
+                minValue = numbers[i];
+            }
+        }
+        return minValue;
+    }
+
+    bool is_playable(){
+        if (score == 0) {
+            return false;
+        }else return true;
+    }
+
+    void winBalance(){
+        score += 100;
+        numbers.clear();
+    }
+
+    void loseBalance(){
+        score -= 100;
+        numbers.clear();
+    }
+    int getScore(){
+        return score;
+    }
+};
