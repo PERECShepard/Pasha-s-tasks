@@ -22,7 +22,7 @@ public:
     }
 
     bool is_playable() const{
-        return score > 0;
+        return score >= 100;
     }
 
     void updateBalance(Player &p1){
