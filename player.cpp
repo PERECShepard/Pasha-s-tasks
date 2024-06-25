@@ -34,4 +34,8 @@ public:
     int getScore() const{
         return score;
     }
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> c5f9e4e (test)

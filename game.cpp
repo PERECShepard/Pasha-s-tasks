@@ -81,4 +81,8 @@ public:
             pc.updateBalance(human);
         }
     }
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> c5f9e4e (test)
