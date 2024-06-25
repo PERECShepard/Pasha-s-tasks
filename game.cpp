@@ -12,7 +12,7 @@ public:
     void run(){
         while(human.is_playable() && pc.is_playable()) {
             std::cout << "Now u have: " << human.getScore() << std::endl
-                << "and pc have: " << pc.getScore() << std::endl;
+                      << "and pc have: " << pc.getScore() << std::endl;
             human.addNumbers(getPlayerInput());
             pc.addNumbers(calcComputerTurn());
             randNumber = randomEngine.getRandomNumber();
@@ -81,8 +81,4 @@ public:
             pc.updateBalance(human);
         }
     }
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> c5f9e4e (test)
