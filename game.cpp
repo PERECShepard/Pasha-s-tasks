@@ -20,7 +20,7 @@ public:
             int absComputer = std::abs(sum(pc) - randNumber);
             int absHuman = std::abs(sum(human) - randNumber);
 
-            std::cout << "Game begin" << std::endl
+            std::cout << "Round started" << std::endl
                       << "Pc chose: " ; pc.showNumbers();
             std::cout <<  "Your choice: "; human.showNumbers();
             std::cout << "Number: " << randNumber << std::endl;
@@ -32,9 +32,11 @@ public:
             }
         }
         if(!human.is_playable()){
-            std::cout << "You have no money to continue the game. Gave over :C";
+            std::cout << "You do not have enough money to play. PC win this game.\n"
+                << "Game finished!" << std::endl;
         }else {
-            std::cout << "Pc have no money to continue the game. Gave over :C";
+            std::cout << "The PC does not have enough money to play. You win this game.\n"
+                << "Game finished!" << std::endl;
         }
     }
 
@@ -49,7 +51,7 @@ public:
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Invalid input. Please enter a number between 1 and 20.\n";
             } else if(!input.insert(number).second) {
-                std::cout << "You entered_ " << number << std::endl;
+                std::cout << "You entered_ " << number << " choose another number."<< std::endl;
             }else{
                 input.insert(number);
             }
@@ -61,7 +63,7 @@ public:
         int pc_value;
         std::set<int> pc_input;
         pc_value = randomEngine.getRandomNumber();
-        for(int i = 0; i < 2; ++i) {
+        while(pc_input.size() < 2) {
             while (!pc_input.insert(pc_value).second) {
                 pc_value = randomEngine.getRandomNumber();
             }
