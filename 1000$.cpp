@@ -10,14 +10,11 @@ class NumberGame{
 public:
     NumberGame() : human(), pc(){}
     void run(){
-        int turns;
-        std::cout << "Please enter amount of numbers: ";
-        std::cin >> turns;
         while(human.is_playable() && pc.is_playable()) {
             std::cout << "Now u have: " << human.getScore() << std::endl
                 << "and pc have: " << pc.getScore() << std::endl;
-            human.addNumbers(getPlayerInput(turns));
-            pc.addNumbers(calcComputerTurn(turns));
+            human.addNumbers(getPlayerInput());
+            pc.addNumbers(calcComputerTurn());
             randNumber = randomEngine.getRandomNumber();
 
             int absComputer = std::abs(sum(pc) - randNumber);
@@ -37,10 +34,10 @@ public:
         std::cout << "Gj";
     }
 
-    std::set<int> getPlayerInput(int count){
+    std::set<int> getPlayerInput(){
         int number;
         std::set<int> input;
-        while (input.size() < count) {
+        while (input.size() < 2) {
             std::cout << "Please enter number between 1 - 20 range: ";
             std::cin >> number;
             if(std::cin.fail() || number < 1 || number > 20){
@@ -54,11 +51,11 @@ public:
         return input;
     }
 
-    std::set<int> calcComputerTurn(int &count){
+    std::set<int> calcComputerTurn(){
         int pc_value;
         std::set<int> pc_input;
         pc_value = randomEngine.getRandomNumber();
-        for(int i = 0; i < count; ++i) {
+        for(int i = 0; i < 2; ++i) {
             while (!pc_input.insert(pc_value).second) {
                 pc_value = randomEngine.getRandomNumber();
             }
