@@ -8,7 +8,7 @@ class NumberGame{
     Player human;
     Player pc;
 public:
-    NumberGame() : human(), pc(){}
+    NumberGame() : human(), pc(), randomEngine(1, 20){}
     void run(){
         while(human.is_playable() && pc.is_playable()) {
             std::cout << "Now u have: " << human.getScore() << std::endl
