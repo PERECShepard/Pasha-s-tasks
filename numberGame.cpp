@@ -8,7 +8,7 @@ class NumberGame{
     Player human;
     Player pc;
 public:
-    NumberGame() : human(), pc(){}
+    NumberGame() : randomEngine(1,10), human(), pc() {}
     void run(){
         int turns;
         std::cout << "Please enter amount of numbers: ";
@@ -84,8 +84,3 @@ public:
         }
     }
 };
-
-int main() {
-    NumberGame game;
-    game.run();
-}
