@@ -82,8 +82,3 @@ public:
         }
     }
 };
-
-int main() {
-    NumberGame game;
-    game.run();
-}
