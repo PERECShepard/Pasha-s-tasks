@@ -37,18 +37,19 @@ public:
         std::cout << "Gj";
     }
 
-    std::set<int> getPlayerInput(int &count){
-        std::cout << "Please enter number between 1 - 20 range:";
+    std::set<int> getPlayerInput(int count){
         int number;
         std::set<int> input;
         while (input.size() < count) {
+            std::cout << "Please enter number between 1 - 20 range: ";
             std::cin >> number;
-            if(std::cin.fail()){
+            if(std::cin.fail() || number < 1 || number > 20){
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Invalid input.";
-            }else if (input.insert(number).second && (number >= 1 && number <= 20)) {
-            } else std::cout << "Wrong input. Try again.";
+                std::cout << "Invalid input. Please enter a number between 1 and 20.\n";
+            } else {
+                input.insert(number);
+            }
         }
         return input;
     }
