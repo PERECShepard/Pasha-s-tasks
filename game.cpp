@@ -31,7 +31,11 @@ public:
                 defineWinnerByAbs(absComputer, absHuman);
             }
         }
-        std::cout << "Gj";
+        if(!human.is_playable()){
+            std::cout << "You have no money to continue the game. Gave over :C";
+        }else {
+            std::cout << "Pc have no money to continue the game. Gave over :C";
+        }
     }
 
     std::set<int> getPlayerInput(){
@@ -44,7 +48,9 @@ public:
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Invalid input. Please enter a number between 1 and 20.\n";
-            } else {
+            } else if(!input.insert(number).second) {
+                std::cout << "You entered_ " << number << std::endl;
+            }else{
                 input.insert(number);
             }
         }
