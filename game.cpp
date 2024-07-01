@@ -1,5 +1,5 @@
 #include <iostream>
-#include "randomEngine.cpp"
+#include "cards.cpp"
 #include "player.cpp"
 
 class NumberGame{
@@ -7,8 +7,9 @@ class NumberGame{
     RandomEngine randomEngine;
     Player human;
     Player pc;
+    Cards cards;
 public:
-    NumberGame() : human(), pc(), randomEngine(1, 20){}
+    NumberGame() : human(), pc(), randomEngine(1, 20), cards(static_cast<Rank>(10)){}
     void run(){
         while(human.is_playable() && pc.is_playable()) {
             std::cout << "Now u have: " << human.getScore() << std::endl
@@ -25,6 +26,13 @@ public:
             std::cout <<  "Your choice: "; human.showNumbers();
             std::cout << "Number: " << randNumber << std::endl;
 
+            cards.displayDesk();
+            const std::set<int>& nums = human.getNumbers();
+            for (auto it = nums.begin(); it != nums.end(); ++it) {
+                cards.chooseCard(*it);
+                cards.displayDesk();
+            }
+
             if (absComputer == absHuman) {
                 std::cout << "*********Tie!*********" << std::endl;
             } else {
@@ -33,10 +41,10 @@ public:
         }
         if(!human.is_playable()){
             std::cout << "You do not have enough money to play. PC win this game.\n"
-                << "Game finished!" << std::endl;
+                      << "Game finished!" << std::endl;
         }else {
             std::cout << "The PC does not have enough money to play. You win this game.\n"
-                << "Game finished!" << std::endl;
+                      << "Game finished!" << std::endl;
         }
     }
 
