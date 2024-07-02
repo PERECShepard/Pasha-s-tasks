@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
 #include "randomEngine.cpp"
+#include "player.cpp"
 
 enum class Rank {
     Two = 2,
@@ -21,9 +23,11 @@ enum class Rank {
 
 class Cards{
     Rank m_rank;
-    std::vector<Rank> desk;
+    std::vector<std::pair<Rank, bool>> desk;
 public:
-    Cards(Rank rank) : m_rank(rank) { createAndShuffleDesk(desk); }
+    Cards(Rank rank) : m_rank(rank) {
+        createAndShuffleDesk(desk);
+    }
 
     std::string getRankToString(const Rank rank) const {
         switch (rank) {
@@ -44,26 +48,35 @@ public:
         }
     }
 
-    void createAndShuffleDesk(std::vector<Rank>& vec) {
+    void createAndShuffleDesk(std::vector<std::pair<Rank, bool>>& vec) {
         for (int beginRank = static_cast<int>(Rank::Two); beginRank <= static_cast<int>(Rank::Ace); ++beginRank) {
-            vec.push_back(static_cast<Rank>(beginRank));
+            vec.emplace_back(static_cast<Rank>(beginRank), false);
         }
         std::random_device rd;
         std::mt19937 g(rd());
         std::shuffle(vec.begin(), vec.end(), g);
     }
 
-    void displayDesk() {
-        for (auto it = desk.begin(); it != desk.end(); ++it) {
-            std::cout << "[" << getRankToString(*it) << "]";
+    void displayDesk(const Player &player) {
+        const std::set<int>& nums = player.getNumbers();
+        for (auto it = nums.begin(); it != nums.end(); ++it) {
+            int num = *it;
+            desk[num - 1].second = true;
+        }
+
+        for (int i = 0; i < desk.size(); ++i) {
+            if (desk[i].second) {
+                std::string rankStr = getRankToString(desk[i].first);
+                std::cout << "[" << rankStr << "]";
+            } else {
+                std::cout << "[" << "#" << "]";
+            }
         }
         std::cout << "\n";
     }
 
-    Cards chooseCard(int cardIndex) {
-        auto it = desk.begin() + cardIndex;
-        Cards chosenCard = *it;
-        desk.erase(it);
-        return chosenCard;
+    int getValue(){
+        int value = static_cast<int>(m_rank);
+        return value;
     }
 };
