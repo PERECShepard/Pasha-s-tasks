@@ -1,6 +1,6 @@
 #include <iostream>
+#include <iterator>
 #include "cards.cpp"
-#include "player.cpp"
 
 class NumberGame{
     int randNumber;
@@ -26,12 +26,8 @@ public:
             std::cout <<  "Your choice: "; human.showNumbers();
             std::cout << "Number: " << randNumber << std::endl;
 
-            cards.displayDesk();
-            const std::set<int>& nums = human.getNumbers();
-            for (auto it = nums.begin(); it != nums.end(); ++it) {
-                cards.chooseCard(*it);
-                cards.displayDesk();
-            }
+            cards.displayDesk(human);
+            cards.displayDesk(pc);
 
             if (absComputer == absHuman) {
                 std::cout << "*********Tie!*********" << std::endl;
@@ -68,12 +64,13 @@ public:
     }
 
     std::set<int> calcComputerTurn(){
+        RandomEngine re(1, 10);
         int pc_value;
         std::set<int> pc_input;
-        pc_value = randomEngine.getRandomNumber();
+        pc_value = re.getRandomNumber();
         while(pc_input.size() < 2) {
             while (!pc_input.insert(pc_value).second) {
-                pc_value = randomEngine.getRandomNumber();
+                pc_value = re.getRandomNumber();
             }
         }
         return pc_input;
