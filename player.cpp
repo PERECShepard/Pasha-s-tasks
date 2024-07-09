@@ -1,9 +1,12 @@
+#pragma once
 #include <iostream>
 #include <set>
+#include "cardPack.cpp"
 
 class Player{
     std::set<int> numbers;
     int score;
+    std::list<Card> pack;
 public:
     explicit Player() : score(1000){}
 
@@ -33,5 +36,13 @@ public:
 
     int getScore() const{
         return score;
+    }
+
+    void PlayerCards(std::list<Card> &list){
+        pack = list;
+    }
+
+    std::list<Card> getPlayerCards(){
+        return pack;
     }
 };
