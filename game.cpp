@@ -1,15 +1,16 @@
+#pragma once
 #include <iostream>
 #include <iterator>
-#include "cards.cpp"
+#include "cardService.cpp"
 
 class NumberGame{
     int randNumber;
     RandomEngine randomEngine;
     Player human;
     Player pc;
-    Cards cards;
+    CardService cardService;
 public:
-    NumberGame() : human(), pc(), randomEngine(1, 20), cards(static_cast<Rank>(10)){}
+    NumberGame() : human(), pc(), randomEngine(1, 20) {}
     void run(){
         while(human.is_playable() && pc.is_playable()) {
             std::cout << "Now u have: " << human.getScore() << std::endl
@@ -17,6 +18,11 @@ public:
             human.addNumbers(getPlayerInput());
             pc.addNumbers(calcComputerTurn());
             randNumber = randomEngine.getRandomNumber();
+
+            cardService.getRandomCard(human);
+            cardService.showCards(human);
+            cardService.getRandomCard(pc);
+            cardService.showCards(pc);
 
             int absComputer = std::abs(sum(pc) - randNumber);
             int absHuman = std::abs(sum(human) - randNumber);
@@ -26,14 +32,12 @@ public:
             std::cout <<  "Your choice: "; human.showNumbers();
             std::cout << "Number: " << randNumber << std::endl;
 
-            cards.displayDesk(human);
-            cards.displayDesk(pc);
-
             if (absComputer == absHuman) {
                 std::cout << "*********Tie!*********" << std::endl;
             } else {
                 defineWinnerByAbs(absComputer, absHuman);
             }
+
         }
         if(!human.is_playable()){
             std::cout << "You do not have enough money to play. PC win this game.\n"
@@ -48,9 +52,9 @@ public:
         int number;
         std::set<int> input;
         while (input.size() < 2) {
-            std::cout << "Please enter number between 1 - 20 range: ";
+            std::cout << "Please enter number between 1 - 10 range: ";
             std::cin >> number;
-            if(std::cin.fail() || number < 1 || number > 20){
+            if(std::cin.fail() || number < 1 || number > 10){
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Invalid input. Please enter a number between 1 and 20.\n";
