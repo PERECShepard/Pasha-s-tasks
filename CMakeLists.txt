@@ -3,4 +3,4 @@ project(1000_)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(main.cpp game.cpp randomEngine.cpp player.cpp main.cpp cards.cpp)
+add_executable(game.cpp randomEngine.cpp player.cpp card.cpp cardPack.cpp main.cpp cardService.cpp)
