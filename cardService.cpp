@@ -28,4 +28,15 @@ public:
         }
         std::cout << std::endl;
     }
+
+    int scoring(Player &player){
+        std::list<Card> scores = player.getPlayerCards();
+        int sum = 0;
+        for (auto it = scores.begin(); it != scores.end(); ++it) {
+            if(it->visibility()){
+                sum += static_cast<int>(it->getRank());
+            }
+        }
+        return sum;
+    }
 };
