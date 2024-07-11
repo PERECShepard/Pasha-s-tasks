@@ -20,22 +20,25 @@ public:
             randNumber = randomEngine.getRandomNumber();
 
             cardService.getRandomCard(human);
+            std::cout << "Your cards: " << std::endl;
             cardService.showCards(human);
+
             cardService.getRandomCard(pc);
+            std::cout << "Pc cards: " << std::endl;
             cardService.showCards(pc);
 
-            int absComputer = std::abs(sum(pc) - randNumber);
-            int absHuman = std::abs(sum(human) - randNumber);
+            int pcSum = std::abs(cardService.scoring(pc) - randNumber);
+            int humanSum = std::abs(cardService.scoring(human) - randNumber);
 
             std::cout << "Round started" << std::endl
-                      << "Pc chose: " ; pc.showNumbers();
-            std::cout <<  "Your choice: "; human.showNumbers();
+                      << "You have: " << cardService.scoring(human) << std::endl;
+            std::cout <<  "Pc have: " << cardService.scoring(pc) << std::endl;
             std::cout << "Number: " << randNumber << std::endl;
 
-            if (absComputer == absHuman) {
+            if (pcSum == humanSum) {
                 std::cout << "*********Tie!*********" << std::endl;
             } else {
-                defineWinnerByAbs(absComputer, absHuman);
+                defineWinnerByAbs(humanSum, pcSum);
             }
 
         }
@@ -80,17 +83,8 @@ public:
         return pc_input;
     }
 
-    int sum(const Player &player){
-        int sum = 0;
-        const std::set<int>& nums = player.getNumbers();
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            sum += *it;
-        }
-        return sum;
-    }
-
-    void defineWinnerByAbs(int humAbs, int compAbs){
-        if(humAbs > compAbs){
+    void defineWinnerByAbs(int humSum, int compSum){
+        if(humSum < compSum){
             std::cout << "U R win because your number were closer" << std::endl;
             human.updateBalance(pc);
         }else {
