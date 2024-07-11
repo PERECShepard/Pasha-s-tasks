@@ -28,25 +28,20 @@ class Card{
     Rank m_rank;
     Suit m_suit;
     bool is_visible;
-    bool is_onTable;
 public:
-    Card(Rank rank, Suit suit) : m_rank(rank), m_suit(suit), is_visible(false), is_onTable(false){}
+    Card(Rank rank, Suit suit) : m_rank(rank), m_suit(suit), is_visible(false) {}
     Card(){}
 
     bool visibility() const{
         return is_visible;
     }
 
-    bool is_table() const{
-        return is_onTable;
-    }
-
-    bool OnTable(){
-        is_onTable = true;
-    }
-
     void Open(){
         is_visible = true;
+    }
+
+    Rank getRank(){
+        return m_rank;
     }
 
     std::string getRankToString() const {
