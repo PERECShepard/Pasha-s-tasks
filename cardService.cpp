@@ -4,8 +4,11 @@
 class CardService{
     CardPack pack;
 public:
+    CardService(){
+        pack.initFullCardPack();
+    }
 
-    void getRandomCard(Player &player){
+    void definePlayerChose(Player &player){
         std::list<Card> playingCards = pack.initCardPack();
         const std::set<int>& nums = player.getNumbers();
         for (int i = 1; i <= playingCards.size(); ++i) {
@@ -37,6 +40,7 @@ public:
                 sum += static_cast<int>(it->getRank());
             }
         }
+        pack.resetPack();
         return sum;
     }
 };
