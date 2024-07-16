@@ -20,9 +20,7 @@ public:
         std::mt19937 gen(dev());
         std::shuffle(temp.begin(), temp.end(), gen);
 
-        for (int i = 0; i < temp.size(); ++i) {
-            cardStack.push(temp[i]);
-        }
+        cardStack = std::stack<Card>(std::deque<Card>(temp.begin(), temp.end()));
     }
 
     std::list<Card> initCardPack() {
@@ -32,6 +30,7 @@ public:
             cardPack.push_back(cardStack.top());
             cardStack.pop();
         }
+        std::cout << cardStack.size();
         return cardPack;
     }
 
