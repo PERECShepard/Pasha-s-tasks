@@ -19,11 +19,11 @@ public:
             pc.addNumbers(calcComputerTurn());
             randNumber = randomEngine.getRandomNumber();
 
-            cardService.getRandomCard(human);
+            cardService.defineOpenCards(human);
             std::cout << "Your cards: " << std::endl;
             cardService.showCards(human);
 
-            cardService.getRandomCard(pc);
+            cardService.defineOpenCards(pc);
             std::cout << "Pc cards: " << std::endl;
             cardService.showCards(pc);
 
