@@ -8,14 +8,16 @@ public:
         pack.initFullCardPack();
     }
 
-    void definePlayerChose(Player &player){
-        std::list<Card> playingCards = pack.initCardPack();
+    void initPlayerCards(Player &player){
+        player.PlayerCards(pack.initCardPack());
+    }
+
+    void defineOpenCards(Player &player){
+        std::list<Card> playingCards = player.getPlayerCards();
         const std::set<int>& nums = player.getNumbers();
-        for (int i = 1; i <= playingCards.size(); ++i) {
-            if (nums.find(i) != nums.end()) {
-                auto it = std::next(playingCards.begin(), i - 1);
-                it->Open();
-            }
+        for (auto num : nums) {
+            auto it = std::next(playingCards.begin(), num - 1);
+            it->Open();
         }
         player.PlayerCards(playingCards);
     }
@@ -42,5 +44,14 @@ public:
         }
         pack.resetPack();
         return sum;
+    }
+
+    void openCards(Player &player){
+        std::list<Card> openedCards = player.getPlayerCards();
+        for (auto it = openedCards.begin(); it != openedCards.end(); ++it) {
+            if (it->visibility()) {
+                std::cout << it->getRankToString() << it->getSuitToString();
+            }
+        }
     }
 };
