@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <set>
 #include "cardPack.cpp"
 
@@ -14,14 +13,11 @@ public:
         numbers = s;
     }
 
-    void showNumbers(){
-        for(auto it = numbers.begin(); it != numbers.end(); ++it){
-            std::cout << *it << " _ ";
-        }
-    }
-
     const std::set<int>& getNumbers() const {
         return numbers;
+    }
+    void resetNumbers(){
+        numbers.clear();
     }
 
     bool is_playable() const{
@@ -38,7 +34,7 @@ public:
         return score;
     }
 
-    void PlayerCards(std::list<Card> &list){
+    void PlayerCards(std::list<Card> list){
         pack = list;
     }
 
