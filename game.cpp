@@ -15,24 +15,34 @@ public:
         while(human.is_playable() && pc.is_playable()) {
             std::cout << "Now u have: " << human.getScore() << std::endl
                       << "and pc have: " << pc.getScore() << std::endl;
-            human.addNumbers(getPlayerInput());
-            pc.addNumbers(calcComputerTurn());
-            randNumber = randomEngine.getRandomNumber();
 
-            cardService.defineOpenCards(human);
+            cardService.initPlayerCards(human);
+            cardService.initPlayerCards(pc);
+            randNumber = randomEngine.getRandomNumber();
             std::cout << "Your cards: " << std::endl;
             cardService.showCards(human);
+            for(int i = 0; i < 2; ++i) {
+                human.addNumbers(getPlayerInput());
+                cardService.defineOpenCards(human);
+                std::cout << "Your cards: " << std::endl;
+                cardService.showCards(human);
+            }
 
-            cardService.defineOpenCards(pc);
             std::cout << "Pc cards: " << std::endl;
             cardService.showCards(pc);
+            for(int i = 0; i < 2; ++i) {
+                pc.addNumbers(calcComputerTurn());
+                cardService.defineOpenCards(pc);
+                std::cout << "Pc cards: " << std::endl;
+                cardService.showCards(pc);
+            }
 
             int pcSum = std::abs(cardService.scoring(pc) - randNumber);
             int humanSum = std::abs(cardService.scoring(human) - randNumber);
 
             std::cout << "Round started" << std::endl
-                      << "You have: " << cardService.scoring(human) << std::endl;
-            std::cout <<  "Pc have: " << cardService.scoring(pc) << std::endl;
+                      << "You chose: "; cardService.openCards(human); std::cout << " = "<< cardService.scoring(human) << std::endl;
+            std::cout <<  "Pc have: "; cardService.openCards(pc); std::cout << " = "<< cardService.scoring(pc) << std::endl;
             std::cout << "Number: " << randNumber << std::endl;
 
             if (pcSum == humanSum) {
@@ -53,19 +63,18 @@ public:
 
     std::set<int> getPlayerInput(){
         int number;
-        std::set<int> input;
-        while (input.size() < 2) {
-            std::cout << "Please enter number between 1 - 10 range: ";
+        std::set<int> input = human.getNumbers();
+        std::cout << "Please enter number between 1 - 10 range: ";
+        std::cin >> number;
+        if(std::cin.fail() || number < 1 || number > 10){
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please enter a number between 1 and 10.\n";
+        } else while(!input.insert(number).second) {
+            std::cout << "You entered_ " << number << " choose another number."<< std::endl;
             std::cin >> number;
-            if(std::cin.fail() || number < 1 || number > 10){
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Invalid input. Please enter a number between 1 and 20.\n";
-            } else if(!input.insert(number).second) {
-                std::cout << "You entered_ " << number << " choose another number."<< std::endl;
-            }else{
-                input.insert(number);
-            }
+        }{
+            input.insert(number);
         }
         return input;
     }
@@ -73,13 +82,12 @@ public:
     std::set<int> calcComputerTurn(){
         RandomEngine re(1, 10);
         int pc_value;
-        std::set<int> pc_input;
+        std::set<int> pc_input = pc.getNumbers();
         pc_value = re.getRandomNumber();
-        while(pc_input.size() < 2) {
-            while (!pc_input.insert(pc_value).second) {
-                pc_value = re.getRandomNumber();
-            }
+        while (!pc_input.insert(pc_value).second) {
+            pc_value = re.getRandomNumber();
         }
+        std::cout << "Computer chose: " << pc_value << std::endl;
         return pc_input;
     }
 
@@ -91,5 +99,7 @@ public:
             std::cout << "PC win because his number was closer" << std::endl;
             pc.updateBalance(human);
         }
+        human.resetNumbers();
+        pc.resetNumbers();
     }
 };
