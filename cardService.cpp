@@ -23,6 +23,11 @@ public:
     }
 
     void showCards(Player &player) {
+        if(player.getType() == PlayerType::HUMAN){
+            std::cout << "Your cards: " << std::endl;
+        }else {
+            std::cout << "Pc cards: " << std::endl;
+        }
         std::list<Card> playingCards = player.getPlayerCards();
         for (auto it = playingCards.begin(); it != playingCards.end(); ++it) {
             if (it->visibility()) {
