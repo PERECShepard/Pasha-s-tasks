@@ -2,15 +2,25 @@
 #include <set>
 #include "cardPack.cpp"
 
+enum class PlayerType{
+    HUMAN,
+    PC
+};
+
 class Player{
     std::set<int> numbers;
     int score;
     std::list<Card> pack;
+    PlayerType type;
 public:
-    explicit Player() : score(1000){}
+    explicit Player(PlayerType t = PlayerType::HUMAN) : score(1000), type(t){}
 
     void addNumbers(const std::set<int> &s){
         numbers = s;
+    }
+
+    PlayerType getType(){
+        return type;
     }
 
     const std::set<int>& getNumbers() const {
