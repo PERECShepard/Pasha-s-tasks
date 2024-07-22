@@ -10,7 +10,7 @@ class NumberGame{
     Player pc;
     CardService cardService;
 public:
-    NumberGame() : human(), pc(), randomEngine(1, 20) {}
+    NumberGame() : human(PlayerType::HUMAN), pc(PlayerType::PC), randomEngine(1, 20) {}
     void run(){
         while(human.is_playable() && pc.is_playable()) {
             std::cout << "Now u have: " << human.getScore() << std::endl
@@ -19,21 +19,18 @@ public:
             cardService.initPlayerCards(human);
             cardService.initPlayerCards(pc);
             randNumber = randomEngine.getRandomNumber();
-            std::cout << "Your cards: " << std::endl;
+
             cardService.showCards(human);
             for(int i = 0; i < 2; ++i) {
                 human.addNumbers(getPlayerInput());
                 cardService.defineOpenCards(human);
-                std::cout << "Your cards: " << std::endl;
                 cardService.showCards(human);
             }
 
-            std::cout << "Pc cards: " << std::endl;
             cardService.showCards(pc);
             for(int i = 0; i < 2; ++i) {
                 pc.addNumbers(calcComputerTurn());
                 cardService.defineOpenCards(pc);
-                std::cout << "Pc cards: " << std::endl;
                 cardService.showCards(pc);
             }
 
