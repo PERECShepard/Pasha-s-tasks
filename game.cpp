@@ -59,20 +59,21 @@ public:
     }
 
     std::set<int> getPlayerInput() {
-        int number;
         std::set<int> input = human.getNumbers();
-        std::cout << "Please enter number between 1 - 10 range: ";
-        std::cin >> number;
-        while (!std::cin || number < 1 || number > 10) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid input. Please enter a number between 1 and 10.\n";
+        int number;
+        while (true) {
+            std::cout << "Please enter number between 1 - 10 range: ";
             std::cin >> number;
-        } if (!input.insert(number).second) {
-            std::cout << "You entered_ " << number << " choose another number." << std::endl;
-            std::cin >> number;
-        } else {
-            input.insert(number);
+            if (std::cin.fail() || number < 1 || number > 10) {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Invalid input. Please enter a number between 1 and 10.\n";
+            } else if (input.count(number)!= 0) {
+                std::cout << "You entered " << number << " choose another number." << std::endl;
+            } else {
+                input.insert(number);
+                break;
+            }
         }
         return input;
     }
