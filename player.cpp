@@ -1,24 +1,33 @@
-#include <iostream>
+#pragma once
 #include <set>
+#include "cardPack.cpp"
+
+enum class PlayerType{
+    HUMAN,
+    PC
+};
 
 class Player{
     std::set<int> numbers;
     int score;
+    std::list<Card> pack;
+    PlayerType type;
 public:
-    explicit Player() : score(1000){}
+    explicit Player(PlayerType t = PlayerType::HUMAN) : score(1000), type(t){}
 
     void addNumbers(const std::set<int> &s){
         numbers = s;
     }
 
-    void showNumbers(){
-        for(auto it = numbers.begin(); it != numbers.end(); ++it){
-            std::cout << *it << " _ ";
-        }
+    PlayerType getType(){
+        return type;
     }
 
     const std::set<int>& getNumbers() const {
         return numbers;
+    }
+    void resetNumbers(){
+        numbers.clear();
     }
 
     bool is_playable() const{
@@ -33,5 +42,13 @@ public:
 
     int getScore() const{
         return score;
+    }
+
+    void PlayerCards(std::list<Card> list){
+        pack = list;
+    }
+
+    std::list<Card> getPlayerCards(){
+        return pack;
     }
 };
